@@ -1,0 +1,86 @@
+[
+    {
+      "type": "heading",
+      "defaultValue": "Nintendo Switch 2 Countdown Configuration"
+    },
+    {
+      "type": "text",
+      "defaultValue": "Watchface which countdowns everyday until the Switch 2 release."
+    },
+    {
+      "type": "section",
+      "items": [
+        {
+          "type": "heading",
+          "defaultValue": "General Settings"
+        },
+        {
+          "type": "toggle",
+          "messageKey": "VibrateOnDisconnect",
+          "label": "Vibrate on Disconnect",
+          "defaultValue": true
+        },
+        {
+          "type": "select",
+          "messageKey": "HourMode",
+          "defaultValue": 0,
+          "label": "Hour Mode",
+          "description": "Override watch default hour format.",
+          "options": [
+            {
+              "label": "System Default",
+              "value": 0
+            },
+            { 
+              "label": "12-Hour", 
+              "value": 1
+            },
+            { 
+              "label": "24-Hour",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "messageKey": "DateFormat",
+          "defaultValue": 0,
+          "label": "Date Format",
+          "options": [
+            {
+              "label": "Month Day, Year",
+              "value": 0
+            },
+            {
+              "label": "Day Month, Year",
+              "value": 1
+            },
+            {
+              "label": "Year, Month Day",
+              "value": 2
+            },
+            {
+              "label": "MM/DD/YY",
+              "value": 3
+            },
+            {
+              "label": "DD/MM/YY",
+              "value": 4
+            },
+            {
+              "label": "YY/MM/DD",
+              "value": 5
+            },
+            {
+              "label": "None",
+              "value": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "submit",
+      "defaultValue": "Save Settings"
+    }
+  ]

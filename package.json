@@ -1,0 +1,75 @@
+{
+  "name": "switch-2-watchface",
+  "author": "robinfire110",
+  "version": "1.0.0",
+  "keywords": [
+    "pebble-app"
+  ],
+  "private": true,
+  "dependencies": {
+    "pebble-clay": "^1.0.4"
+  },
+  "pebble": {
+    "displayName": "switch-2-watchface",
+    "uuid": "39364e42-4cdb-4fb0-af18-e7fdc3b15889",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
+    "targetPlatforms": [
+      "basalt",
+      "chalk",
+      "diorite"
+    ],
+    "watchapp": {
+      "watchface": true
+    },
+    "messageKeys": [
+      "VibrateOnDisconnect",
+      "HourMode",
+      "DateFormat"
+    ],
+    "resources": {
+      "media": [
+        {
+          "characterRegex": "[0-9:,]",
+          "type": "font",
+          "name": "FONT_COUTURE_48",
+          "file": "fonts/typold-bold.ttf",
+          "compatibility": "2.7"
+        },
+        {
+          "characterRegex": "[0-9,:A-Za-z ]",
+          "type": "font",
+          "name": "FONT_COUTURE_16",
+          "file": "fonts/typold-bold.ttf",
+          "compatibility": "2.7"
+        },
+        {
+          "menuIcon": "true",
+          "type": "png",
+          "name": "IMAGE_MENU_ICON",
+          "file": "images/menu_icon.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_BACKGROUND",
+          "file": "images/background.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_BACKGROUND_ROUND",
+          "file": "images/background_round.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_BLUETOOTH_ON",
+          "file": "images/bluetooth_on.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_BLUETOOTH_OFF",
+          "file": "images/bluetooth_off.png"
+        }
+      ]
+    }
+  }
+}
