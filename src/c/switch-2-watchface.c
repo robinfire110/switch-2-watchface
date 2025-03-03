@@ -166,7 +166,7 @@ static void main_window_load(Window *window)
   /* Bluetooth */
   s_bluetooth_on_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_ON);
   s_bluetooth_off_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_OFF);
-  s_bluetooth_layer = bitmap_layer_create(GRect(PBL_IF_RECT_ELSE(64, 49), PBL_IF_RECT_ELSE(140, 20), bounds.size.w, 30));
+  s_bluetooth_layer = bitmap_layer_create(GRect(PBL_IF_RECT_ELSE(64, 0), PBL_IF_RECT_ELSE(140, 154), bounds.size.w, 30));
   bitmap_layer_set_bitmap(s_bluetooth_layer, s_bluetooth_on_bitmap);
   bitmap_layer_set_compositing_mode(s_bluetooth_layer, GCompOpSet);
   layer_add_child(window_layer, bitmap_layer_get_layer(s_bluetooth_layer));
@@ -178,9 +178,9 @@ static void main_window_load(Window *window)
 
   /* Time & Date */
   // Create the TextLayer with specific bounds (x, y)
-  s_time_layer = text_layer_create(GRect(1, PBL_IF_RECT_ELSE(-2, 20), bounds.size.w, 100));
-  s_date_layer = text_layer_create(GRect(1, PBL_IF_RECT_ELSE(117, 23), bounds.size.w, 50));
-  s_countdown_layer = text_layer_create(GRect(1, PBL_IF_RECT_ELSE(140, 23), bounds.size.w, 50));
+  s_time_layer = text_layer_create(GRect(1, PBL_IF_RECT_ELSE(-2, 8), bounds.size.w, 100));
+  s_date_layer = text_layer_create(GRect(1, PBL_IF_RECT_ELSE(117, 120), bounds.size.w, 50));
+  s_countdown_layer = text_layer_create(GRect(1, PBL_IF_RECT_ELSE(140, 140), bounds.size.w, 50));
 
   // Create GFont
   s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_COUTURE_48));
