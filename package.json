@@ -10,7 +10,7 @@
     "pebble-clay": "^1.0.4"
   },
   "pebble": {
-    "displayName": "switch-2-watchface",
+    "displayName": "Nintendo Switch 2 Countdown",
     "uuid": "39364e42-4cdb-4fb0-af18-e7fdc3b15889",
     "sdkVersion": "3",
     "enableMultiJS": true,
