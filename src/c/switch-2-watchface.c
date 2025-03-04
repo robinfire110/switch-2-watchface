@@ -31,6 +31,7 @@ static void update_time()
     case 4: strftime(d_buffer, sizeof(d_buffer), "%d/%m/%y", tick_time); break;
     case 5: strftime(d_buffer, sizeof(d_buffer), "%y/%m/%d", tick_time); break;
     case 6: strftime(d_buffer, sizeof(d_buffer), " ", tick_time); break;
+    case 7: strftime(d_buffer, sizeof(d_buffer), "%a, %b %d", tick_time); break;
   }
 
   //Get Number of days away
@@ -53,7 +54,8 @@ static void update_time()
   // Display this time on the TextLayer
   text_layer_set_text(s_time_layer, s_buffer);
   text_layer_set_text(s_date_layer, d_buffer);
-  text_layer_set_text(s_countdown_layer, c_buffer);
+  if (!settings.HideCountdown) text_layer_set_text(s_countdown_layer, c_buffer);
+  else text_layer_set_text(s_countdown_layer, "");
 }
 
 // Initialize the default settings
@@ -61,6 +63,7 @@ static void prv_default_settings() {
   settings.VibrateOnDisconnect = true;
   settings.HourMode = 0;
   settings.DateFormat = 0;
+  settings.HideCountdown = false;
 }
 
 // Read settings from persistent storage
@@ -103,6 +106,13 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
   if (data_t)
   {
     settings.DateFormat = atoi(data_t->value->cstring);
+  }
+
+  //Vibrate
+  Tuple *countdown_t = dict_find(iterator, MESSAGE_KEY_HideCountdown);
+  if (vibrate_t)
+  {
+    settings.HideCountdown = countdown_t->value->uint32;
   }
 
   //Save Settings

@@ -22,6 +22,7 @@ typedef struct ClaySettings {
   bool VibrateOnDisconnect;
   int HourMode;
   int DateFormat;
+  bool HideCountdown;
 } ClaySettings;
 static ClaySettings settings;
 

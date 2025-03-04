@@ -60,6 +60,10 @@
               "value": 2
             },
             {
+              "label": "Weekday, Month Day",
+              "value": 7
+            },
+            {
               "label": "MM/DD/YY",
               "value": 3
             },
@@ -76,6 +80,13 @@
               "value": 6
             }
           ]
+        },
+        {
+          "type": "toggle",
+          "messageKey": "HideCountdown",
+          "label": "Hide Countdown",
+          "description": "Allows watchface to be used as general Nintendo Switch 2 watchface.",
+          "defaultValue": false
         }
       ]
     },
