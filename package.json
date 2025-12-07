@@ -1,7 +1,7 @@
 {
   "name": "switch-2-watchface",
   "author": "robinfire110",
-  "version": "1.1.0",
+  "version": "1.3.0",
   "keywords": [
     "pebble-app"
   ],
@@ -10,13 +10,16 @@
     "pebble-clay": "^1.0.4"
   },
   "pebble": {
-    "displayName": "Nintendo Switch 2 Countdown",
+    "displayName": "Nintendo Switch 2",
     "uuid": "39364e42-4cdb-4fb0-af18-e7fdc3b15889",
     "sdkVersion": "3",
     "enableMultiJS": true,
     "targetPlatforms": [
+      "aplite",
       "basalt",
-      "chalk"
+      "chalk",
+      "diorite",
+      "emery"
     ],
     "watchapp": {
       "watchface": true
@@ -24,8 +27,8 @@
     "messageKeys": [
       "VibrateOnDisconnect",
       "HourMode",
-      "DateFormat", 
-      "HideCountdown"
+      "DateFormat",
+      "InvertColors"
     ],
     "resources": {
       "media": [
@@ -33,15 +36,25 @@
           "characterRegex": "[0-9:,]",
           "type": "font",
           "name": "FONT_COUTURE_48",
-          "file": "fonts/typold-bold.ttf",
-          "compatibility": "2.7"
+          "file": "fonts/typold-bold.ttf"
+        },
+        {
+          "characterRegex": "[0-9:,]",
+          "type": "font",
+          "name": "FONT_COUTURE_60",
+          "file": "fonts/typold-bold.ttf"
         },
         {
           "characterRegex": "[ -~]",
           "type": "font",
           "name": "FONT_COUTURE_16",
-          "file": "fonts/typold-bold.ttf",
-          "compatibility": "2.7"
+          "file": "fonts/typold-bold.ttf"
+        },
+        {
+          "characterRegex": "[ -~]",
+          "type": "font",
+          "name": "FONT_COUTURE_24",
+          "file": "fonts/typold-bold.ttf"
         },
         {
           "menuIcon": "true",
@@ -52,22 +65,68 @@
         {
           "type": "bitmap",
           "name": "IMAGE_BACKGROUND",
-          "file": "images/background.png"
+          "file": "images/background.png",
+          "targetPlatforms": ["basalt"]
         },
         {
           "type": "bitmap",
-          "name": "IMAGE_BACKGROUND_ROUND",
-          "file": "images/background_round.png"
+          "name": "IMAGE_BACKGROUND",
+          "file": "images/background_round.png",
+          "targetPlatforms": ["chalk"]
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_BACKGROUND",
+          "file": "images/background_emery.png",
+          "targetPlatforms": ["emery"]
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_BACKGROUND",
+          "file": "images/background_aplite_bw.png",
+          "targetPlatforms": ["aplite", "diorite"]
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_BACKGROUND_INVERT",
+          "file": "images/background_aplite_wb.png",
+          "targetPlatforms": ["aplite", "diorite"]
         },
         {
           "type": "bitmap",
           "name": "IMAGE_BLUETOOTH_ON",
-          "file": "images/bluetooth_on.png"
+          "file": "images/bluetooth_on.png",
+          "targetPlatforms": ["basalt", "chalk", "emery"]
         },
         {
           "type": "bitmap",
           "name": "IMAGE_BLUETOOTH_OFF",
-          "file": "images/bluetooth_off.png"
+          "file": "images/bluetooth_off.png",
+          "targetPlatforms": ["basalt", "chalk", "emery"]
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_BLUETOOTH_ON",
+          "file": "images/bluetooth_on_aplite.png",
+          "targetPlatforms": ["aplite", "diorite"]
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_BLUETOOTH_OFF",
+          "file": "images/bluetooth_off_aplite.png",
+          "targetPlatforms": ["aplite", "diorite"]
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_BLUETOOTH_ON_INVERT",
+          "file": "images/bluetooth_on_aplite_invert.png",
+          "targetPlatforms": ["aplite", "diorite"]
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_BLUETOOTH_OFF_INVERT",
+          "file": "images/bluetooth_off_aplite_invert.png",
+          "targetPlatforms": ["aplite", "diorite"]
         }
       ]
     }

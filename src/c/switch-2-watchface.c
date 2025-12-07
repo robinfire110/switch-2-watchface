@@ -38,8 +38,8 @@ static void update_time()
   //Create release goal (April 2, 2025 for now)
   struct tm release_time = { 0 };
   release_time.tm_year = 2025 - 1900; //0 = Year 1900, so should subtract to get current year
-  release_time.tm_mon = 4 - 1; //Minus 1 because it's base 0
-  release_time.tm_mday = 2;
+  release_time.tm_mon = 6 - 1; //Minus 1 because it's base 0
+  release_time.tm_mday = 5;
   release_time.tm_hour = release_time.tm_min = release_time.tm_sec = 0;
   release_time.tm_isdst = -1;
 
@@ -48,14 +48,51 @@ static void update_time()
   int days = round(dt / 86400) + 1;
   if (days > 1) snprintf(c_buffer, sizeof(c_buffer), "%d Days", days);
   else if (days == 1) snprintf(c_buffer, sizeof(c_buffer), "%d Day", days);
-  else if (days == 0) snprintf(c_buffer, sizeof(c_buffer), "%s", "Direct Day!");
-  else if (days < 0) snprintf(c_buffer, sizeof(c_buffer), "%s", "Direct Out!");  
+  else if (days == 0) snprintf(c_buffer, sizeof(c_buffer), "%s", "Today!");
+  else if (days < 0) snprintf(c_buffer, sizeof(c_buffer), "%s", "");  
   
   // Display this time on the TextLayer
   text_layer_set_text(s_time_layer, s_buffer);
   text_layer_set_text(s_date_layer, d_buffer);
-  if (!settings.HideCountdown) text_layer_set_text(s_countdown_layer, c_buffer);
-  else text_layer_set_text(s_countdown_layer, "");
+  //if (!settings.HideCountdown) text_layer_set_text(s_countdown_layer, c_buffer);
+  //else text_layer_set_text(s_countdown_layer, "");
+}
+
+static void set_background_colors() {
+  //Destroy old
+  if (s_background_bitmap) gbitmap_destroy(s_background_bitmap);
+  if (s_bluetooth_on_bitmap) gbitmap_destroy(s_bluetooth_on_bitmap);
+  if (s_bluetooth_off_bitmap) gbitmap_destroy(s_bluetooth_off_bitmap);
+
+  //Set Background
+  #if defined(PBL_BW)
+    //Create New
+    if (settings.InvertColors)
+    {
+        s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BACKGROUND_INVERT);
+        s_bluetooth_on_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_ON_INVERT);
+        s_bluetooth_off_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_OFF_INVERT);
+        text_layer_set_text_color(s_date_layer, GColorBlack);
+        text_layer_set_text_color(s_time_layer, GColorBlack);
+    } 
+    else
+    {
+        s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BACKGROUND);
+        s_bluetooth_on_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_ON);
+        s_bluetooth_off_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_OFF);
+        text_layer_set_text_color(s_date_layer, GColorWhite);
+        text_layer_set_text_color(s_time_layer, GColorWhite);
+    } 
+  #else
+    s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BACKGROUND);
+    s_bluetooth_on_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_ON);
+    s_bluetooth_off_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_OFF);
+  #endif
+
+  //Set to layer
+  bitmap_layer_set_bitmap(s_background_layer, s_background_bitmap);
+  bitmap_layer_set_bitmap(s_bluetooth_layer, s_bluetooth_on_bitmap);
+  layer_mark_dirty(bitmap_layer_get_layer(s_background_layer));
 }
 
 // Initialize the default settings
@@ -63,7 +100,9 @@ static void prv_default_settings() {
   settings.VibrateOnDisconnect = true;
   settings.HourMode = 0;
   settings.DateFormat = 0;
-  settings.HideCountdown = false;
+  settings.InvertColors = false;
+  //settings.CountdownDate = [];
+  //settings.HideCountdown = false;
 }
 
 // Read settings from persistent storage
@@ -75,6 +114,7 @@ static void prv_load_settings() {
   persist_read_data(SETTINGS_KEY, &settings, sizeof(settings));
 
   //Update
+  set_background_colors();
   update_time();
   printf("previoussettings");
 }
@@ -102,20 +142,32 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
   }
 
   //Date Format
-  Tuple *data_t = dict_find(iterator, MESSAGE_KEY_DateFormat);
-  if (data_t)
+  Tuple *date_t = dict_find(iterator, MESSAGE_KEY_DateFormat);
+  if (date_t)
   {
-    settings.DateFormat = atoi(data_t->value->cstring);
+    settings.DateFormat = atoi(date_t->value->cstring);
   }
 
-  //Vibrate
+  Tuple *invert_t = dict_find(iterator, MESSAGE_KEY_InvertColors);
+  if (invert_t)
+  {
+    settings.InvertColors = invert_t->value->uint32;
+  }
+
+  //Hide Countdown
+  /*
   Tuple *countdown_t = dict_find(iterator, MESSAGE_KEY_HideCountdown);
-  if (vibrate_t)
+  if (countdown_t)
   {
     settings.HideCountdown = countdown_t->value->uint32;
   }
+  */
+
+  //Update Colors (if needed)
+  
 
   //Save Settings
+  set_background_colors();
   update_time();
   prv_save_settings();
 }
@@ -162,21 +214,46 @@ static void main_window_load(Window *window)
   GRect bounds = layer_get_bounds(window_layer);
 
   /* Background */
-  // Create GBitmap
-  PBL_IF_RECT_ELSE(s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BACKGROUND), s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BACKGROUND_ROUND));
-
   // Create BitmapLayer to display the GBitmap
   s_background_layer = bitmap_layer_create(bounds);
   
   // Set the bitmap onto the layer and add to the window
-  bitmap_layer_set_bitmap(s_background_layer, s_background_bitmap);
+  #if PBL_BW
+    if (settings.InvertColors) s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BACKGROUND_INVERT);
+    else s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BACKGROUND);
+  #else
+    s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BACKGROUND);
+  #endif
+
   bitmap_layer_set_compositing_mode(s_background_layer, GCompOpSet);
   layer_add_child(window_layer, bitmap_layer_get_layer(s_background_layer));
 
   /* Bluetooth */
-  s_bluetooth_on_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_ON);
-  s_bluetooth_off_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_OFF);
-  s_bluetooth_layer = bitmap_layer_create(GRect(PBL_IF_RECT_ELSE(64, 0), PBL_IF_RECT_ELSE(140, 154), bounds.size.w, 30));
+  #if PBL_BW
+    if (settings.InvertColors)
+    {
+      s_bluetooth_on_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_ON_INVERT);
+      s_bluetooth_off_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_OFF_INVERT);
+    } 
+    else
+    {
+      s_bluetooth_on_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_ON);
+      s_bluetooth_off_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_OFF);
+    }
+  #else
+    s_bluetooth_on_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_ON);
+    s_bluetooth_off_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_OFF);
+  #endif
+
+  
+  #if PBL_DISPLAY_HEIGHT == 228 
+    s_bluetooth_layer = bitmap_layer_create(GRect(1, 192, bounds.size.w, 30));
+  #elif PBL_DISPLAY_HEIGHT == 180
+    s_bluetooth_layer = bitmap_layer_create(GRect(1, 140, bounds.size.w, 30));
+  #else
+    s_bluetooth_layer = bitmap_layer_create(GRect(1, 140, bounds.size.w, 30));
+  #endif
+  
   bitmap_layer_set_bitmap(s_bluetooth_layer, s_bluetooth_on_bitmap);
   bitmap_layer_set_compositing_mode(s_bluetooth_layer, GCompOpSet);
   layer_add_child(window_layer, bitmap_layer_get_layer(s_bluetooth_layer));
@@ -188,16 +265,35 @@ static void main_window_load(Window *window)
 
   /* Time & Date */
   // Create the TextLayer with specific bounds (x, y)
-  s_time_layer = text_layer_create(GRect(1, PBL_IF_RECT_ELSE(-2, 8), bounds.size.w, 100));
-  s_date_layer = text_layer_create(GRect(1, PBL_IF_RECT_ELSE(117, 120), bounds.size.w, 50));
-  s_countdown_layer = text_layer_create(GRect(1, PBL_IF_RECT_ELSE(140, 140), bounds.size.w, 50));
+  #if PBL_DISPLAY_HEIGHT == 228 
+    s_time_layer = text_layer_create(GRect(1, -2, bounds.size.w, 100));
+    s_date_layer = text_layer_create(GRect(1, 160, bounds.size.w, 50));
+    //s_countdown_layer = text_layer_create(GRect(1, 185, bounds.size.w, 50));
+  #elif PBL_DISPLAY_HEIGHT == 180
+    s_time_layer = text_layer_create(GRect(1, 8, bounds.size.w, 100));
+    s_date_layer = text_layer_create(GRect(1, 120, bounds.size.w, 50));
+    //s_countdown_layer = text_layer_create(GRect(1, 140, bounds.size.w, 50));
+  #else
+    s_time_layer = text_layer_create(GRect(1, -2, bounds.size.w, 100));
+    s_date_layer = text_layer_create(GRect(1, 117, bounds.size.w, 50));
+    //s_countdown_layer = text_layer_create(GRect(1, 140, bounds.size.w, 50));
+  #endif
 
   // Create GFont
-  s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_COUTURE_48));
-  text_layer_set_font(s_time_layer, s_time_font); 
-  s_date_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_COUTURE_16));
-  text_layer_set_font(s_date_layer, s_date_font); 
-  text_layer_set_font(s_countdown_layer, s_date_font); 
+  // Create GFont
+  #if PBL_DISPLAY_HEIGHT == 228 
+    s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_COUTURE_60));
+    text_layer_set_font(s_time_layer, s_time_font); 
+    s_date_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_COUTURE_24));
+    text_layer_set_font(s_date_layer, s_date_font); 
+    //text_layer_set_font(s_countdown_layer, s_date_font); 
+  #else
+    s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_COUTURE_48));
+    text_layer_set_font(s_time_layer, s_time_font); 
+    s_date_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_COUTURE_16));
+    text_layer_set_font(s_date_layer, s_date_font); 
+    //text_layer_set_font(s_countdown_layer, s_date_font); 
+  #endif
 
   // Set Layer Properties
   text_layer_set_background_color(s_time_layer, GColorClear);
@@ -206,17 +302,17 @@ static void main_window_load(Window *window)
   text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
   text_layer_set_background_color(s_date_layer, GColorClear);
   text_layer_set_text_color(s_date_layer, GColorWhite);
-  text_layer_set_text(s_date_layer, "Mar 3, 2025");
+  text_layer_set_text(s_date_layer, "Jan 01, 2026");
   text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
-  text_layer_set_background_color(s_countdown_layer, GColorClear);
-  text_layer_set_text_color(s_countdown_layer, GColorWhite);
-  text_layer_set_text(s_countdown_layer, "0 Days");
-  text_layer_set_text_alignment(s_countdown_layer, GTextAlignmentCenter);
+  //text_layer_set_background_color(s_countdown_layer, GColorClear);
+  //text_layer_set_text_color(s_countdown_layer, GColorWhite);
+  //text_layer_set_text(s_countdown_layer, "0 Days");
+  //text_layer_set_text_alignment(s_countdown_layer, GTextAlignmentCenter);
 
   // Add it as a child layer to the Window's root layer
   layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
   layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
-  layer_add_child(window_layer, text_layer_get_layer(s_countdown_layer));
+  //layer_add_child(window_layer, text_layer_get_layer(s_countdown_layer));
 }
 
 static void main_window_unload(Window *window) 
@@ -224,7 +320,7 @@ static void main_window_unload(Window *window)
   // Destroy TextLayer
   text_layer_destroy(s_time_layer);
   text_layer_destroy(s_date_layer);
-  text_layer_destroy(s_countdown_layer);
+  //text_layer_destroy(s_countdown_layer);
 
   // Unload GFont
   fonts_unload_custom_font(s_time_font);
