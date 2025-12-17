@@ -1,11 +1,7 @@
 [
     {
       "type": "heading",
-      "defaultValue": "Nintendo Switch 2 Countdown Configuration"
-    },
-    {
-      "type": "text",
-      "defaultValue": "Watchface which countdowns everyday until the Switch 2 release."
+      "defaultValue": "Nintendo Switch 2 Configuration"
     },
     {
       "type": "section",

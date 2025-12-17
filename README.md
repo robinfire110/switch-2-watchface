@@ -1,7 +1,10 @@
 # switch-2-watchface
 Nintendo Switch 2 countdown watchface for Pebble Time/Pebble Time Round
 
-# Rebble App Store Link
+# App Store Link
+Rebble - https://apps.rebble.io/en_US/application/67c648a1b7a02300092ba0c8
+RePebble - https://apps.repebble.com/en_US/application/67c648a1b7a02300092ba0c8
+
 TBD
 
 # Description

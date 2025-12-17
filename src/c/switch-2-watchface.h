@@ -5,7 +5,7 @@
 static Window* s_main_window;
 static TextLayer* s_time_layer;
 static TextLayer* s_date_layer;
-static TextLayer* s_countdown_layer;
+//static TextLayer* s_countdown_layer;
 
 static BitmapLayer* s_background_layer;
 static BitmapLayer* s_bluetooth_layer;
