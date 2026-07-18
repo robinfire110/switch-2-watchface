@@ -248,6 +248,8 @@ static void main_window_load(Window *window)
   
   #if PBL_DISPLAY_HEIGHT == 228 
     s_bluetooth_layer = bitmap_layer_create(GRect(1, 192, bounds.size.w, 30));
+  #elif PBL_DISPLAY_HEIGHT == 260
+    s_bluetooth_layer = bitmap_layer_create(GRect(1, 208, bounds.size.w, 30));
   #elif PBL_DISPLAY_HEIGHT == 180
     s_bluetooth_layer = bitmap_layer_create(GRect(1, 140, bounds.size.w, 30));
   #else
@@ -269,6 +271,10 @@ static void main_window_load(Window *window)
     s_time_layer = text_layer_create(GRect(1, -2, bounds.size.w, 100));
     s_date_layer = text_layer_create(GRect(1, 160, bounds.size.w, 50));
     //s_countdown_layer = text_layer_create(GRect(1, 185, bounds.size.w, 50));
+  #elif PBL_DISPLAY_HEIGHT == 260
+    s_time_layer = text_layer_create(GRect(1, 14, bounds.size.w, 100));
+    s_date_layer = text_layer_create(GRect(1, 176, bounds.size.w, 50));
+    //s_countdown_layer = text_layer_create(GRect(1, 140, bounds.size.w, 50));
   #elif PBL_DISPLAY_HEIGHT == 180
     s_time_layer = text_layer_create(GRect(1, 8, bounds.size.w, 100));
     s_date_layer = text_layer_create(GRect(1, 120, bounds.size.w, 50));
@@ -281,7 +287,7 @@ static void main_window_load(Window *window)
 
   // Create GFont
   // Create GFont
-  #if PBL_DISPLAY_HEIGHT == 228 
+  #if PBL_DISPLAY_HEIGHT == 228 || PBL_DISPLAY_HEIGHT == 260
     s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_COUTURE_60));
     text_layer_set_font(s_time_layer, s_time_font); 
     s_date_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_COUTURE_24));

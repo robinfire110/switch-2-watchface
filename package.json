@@ -7,7 +7,7 @@
   ],
   "private": true,
   "dependencies": {
-    "pebble-clay": "^1.0.4"
+    "@rebble/clay": "^1.0.10"
   },
   "pebble": {
     "displayName": "Nintendo Switch 2",
@@ -19,7 +19,8 @@
       "basalt",
       "chalk",
       "diorite",
-      "emery"
+      "emery",
+      "gabbro"
     ],
     "watchapp": {
       "watchface": true
@@ -66,67 +67,109 @@
           "type": "bitmap",
           "name": "IMAGE_BACKGROUND",
           "file": "images/background.png",
-          "targetPlatforms": ["basalt"]
+          "targetPlatforms": [
+            "basalt"
+          ]
         },
         {
           "type": "bitmap",
           "name": "IMAGE_BACKGROUND",
           "file": "images/background_round.png",
-          "targetPlatforms": ["chalk"]
+          "targetPlatforms": [
+            "chalk"
+          ]
         },
         {
           "type": "bitmap",
           "name": "IMAGE_BACKGROUND",
           "file": "images/background_emery.png",
-          "targetPlatforms": ["emery"]
+          "targetPlatforms": [
+            "emery"
+          ]
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_BACKGROUND",
+          "file": "images/background_gabbro.png",
+          "targetPlatforms": [
+            "gabbro"
+          ]
         },
         {
           "type": "bitmap",
           "name": "IMAGE_BACKGROUND",
           "file": "images/background_aplite_bw.png",
-          "targetPlatforms": ["aplite", "diorite"]
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
         },
         {
           "type": "bitmap",
           "name": "IMAGE_BACKGROUND_INVERT",
           "file": "images/background_aplite_wb.png",
-          "targetPlatforms": ["aplite", "diorite"]
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
         },
         {
           "type": "bitmap",
           "name": "IMAGE_BLUETOOTH_ON",
           "file": "images/bluetooth_on.png",
-          "targetPlatforms": ["basalt", "chalk", "emery"]
+          "targetPlatforms": [
+            "basalt",
+            "chalk",
+            "emery",
+            "gabbro"
+          ]
         },
         {
           "type": "bitmap",
           "name": "IMAGE_BLUETOOTH_OFF",
           "file": "images/bluetooth_off.png",
-          "targetPlatforms": ["basalt", "chalk", "emery"]
+          "targetPlatforms": [
+            "basalt",
+            "chalk",
+            "emery",
+            "gabbro"
+          ]
         },
         {
           "type": "bitmap",
           "name": "IMAGE_BLUETOOTH_ON",
           "file": "images/bluetooth_on_aplite.png",
-          "targetPlatforms": ["aplite", "diorite"]
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
         },
         {
           "type": "bitmap",
           "name": "IMAGE_BLUETOOTH_OFF",
           "file": "images/bluetooth_off_aplite.png",
-          "targetPlatforms": ["aplite", "diorite"]
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
         },
         {
           "type": "bitmap",
           "name": "IMAGE_BLUETOOTH_ON_INVERT",
           "file": "images/bluetooth_on_aplite_invert.png",
-          "targetPlatforms": ["aplite", "diorite"]
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
         },
         {
           "type": "bitmap",
           "name": "IMAGE_BLUETOOTH_OFF_INVERT",
           "file": "images/bluetooth_off_aplite_invert.png",
-          "targetPlatforms": ["aplite", "diorite"]
+          "targetPlatforms": [
+            "aplite",
+            "diorite"
+          ]
         }
       ]
     }
